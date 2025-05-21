@@ -4,4 +4,12 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp
+        alojamiento.cpp \
+        fecha.cpp \
+        main.cpp \
+        sistemaudeastay.cpp
+
+HEADERS += \
+    alojamiento.h \
+    fecha.h \
+    sistemaudeastay.h
