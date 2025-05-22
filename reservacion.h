@@ -1,7 +1,7 @@
 #ifndef RESERVACION_H
 #define RESERVACION_H
 #include <string>
-#include "Fecha.h"
+#include "fecha.h"
 using namespace std;
 
 class Reservacion
