@@ -1,4 +1,4 @@
-#ifndef SISTEMA_UDEASTAY_H
+/*#ifndef SISTEMA_UDEASTAY_H
 #define SISTEMA_UDEASTAY_H
 
 #include <string>
@@ -115,3 +115,4 @@ public:
 };
 
 #endif // SISTEMA_UDEASTAY_H
+*/

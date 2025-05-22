@@ -1,3 +1,4 @@
-#include "sistemaudeastay.h"
+/*#include "sistemaudeastay.h"
 
 SistemaUdeaStay::SistemaUdeaStay() {}
+*/
