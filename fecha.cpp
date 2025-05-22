@@ -1,8 +1,7 @@
 // --- Fecha.cpp ---
 // Implementación de la clase Fecha para el sistema UdeAStay.
-// Autor: [Tu Nombre/Equipo]
+// Autor: [Nikolas Ortega]
 // Fecha de creación: 21 de Mayo del 2025
-
 #include "Fecha.h"
 #include <iostream>   // Para std::cerr (salida de errores)
 #include <sstream>    // Para std::ostringstream (construcción de strings)
