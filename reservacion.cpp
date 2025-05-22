@@ -6,7 +6,7 @@ Reservacion::Reservacion(const string& cod, const string& codigoAloja, const str
                          Fecha entrada, int duracionNoche, Fecha pago, int valortotal,
                          const string& anot)
     :   codigo(cod), codigoAlojamiento(codigoAloja), documentoHuesped(docHues),
-        metodoPago(metPago), fechaEntrada(entrada),duracionNoche(noches),
+        metodoPago(metPago), fechaEntrada(entrada), duracionNoche(duracionNoche),
         fechaPago(pago), valorTotal(valortotal), activa(true){
     if (anot.length() > 1000) {
         anotaciones = anot.substr(0,1000);
@@ -27,7 +27,7 @@ Fecha Reservacion::getFechaSalida() const {
     return fechaEntrada.calcularFechaMasDuracion(duracionNoche);
 }
 
-bool Reservacion::estaActiva() const {
+bool Reservacion::EstaActiva() const {
     return activa;
 }
 
@@ -49,8 +49,8 @@ void Reservacion::mostrarComprobante() const {
     cout << "Codigo de Alojamiento: " << codigoAlojamiento << endl;
     cout << "Documento del huesped: " << documentoHuesped << endl;
     cout << "Metodo de pago: " << metodoPago << endl;
-    cout << "Fecha de entrada: "; << fechaEntrada.toStringFormatoLargo() << endl;
-    cout << "Fecha de salida: "; << getFechaSalida().toStringFormatoLargo() << endl;
+    cout << "Fecha de entrada: " << fechaEntrada.toStringFormatoLargo() << endl;
+    cout << "Fecha de salida: " << getFechaSalida().toStringFormatoLargo() << endl;
     cout << "Valor total pagado: " << valorTotal << endl;
     cout << "Estado: " << (activa ? "Activa" : "Cancelada") << endl;
     cout << "Anotaciones: " << anotaciones << endl;
