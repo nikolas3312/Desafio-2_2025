@@ -6,6 +6,9 @@ using namespace std;
 class Anfitrion
 {
 private:
+    string id;
+    string nombre;
+    string contraseñaLogin;
     string documento;
     int antiguedadMeses;
     float puntuacion;
@@ -15,6 +18,8 @@ private:
 public:
     //constructor
     Anfitrion(const string& doc, int antig, float punt = 0.0);
+    Anfitrion(const string& id_, const string& nom_, const string& doc_, const string& clave,
+              int antig, float punt);
     //Destructor
     ~Anfitrion();
 
