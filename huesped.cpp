@@ -12,6 +12,43 @@ Huesped::Huesped(const string& id_, const string& nom_, const string& doc, const
     codigosDeSusReservaciones = new string[capacidad];
 }
 
+// Constructor por copia
+Huesped::Huesped(const Huesped& otro)
+    : id(otro.id), nombre(otro.nombre), credencialLogin(otro.credencialLogin),
+    documento(otro.documento), antiguedadMeses(otro.antiguedadMeses),
+    puntuacion(otro.puntuacion), cantidad(otro.cantidad), capacidad(otro.capacidad)
+{
+    codigosDeSusReservaciones = new string[capacidad];
+    for (int i = 0; i < cantidad; ++i) {
+        codigosDeSusReservaciones[i] = otro.codigosDeSusReservaciones[i];
+    }
+}
+
+// Operador de asignación
+Huesped& Huesped::operator=(const Huesped& otro) {
+    if (this != &otro) {
+        // Liberar memoria actual
+        delete[] codigosDeSusReservaciones;
+
+        // Copiar datos
+        id = otro.id;
+        nombre = otro.nombre;
+        credencialLogin = otro.credencialLogin;
+        documento = otro.documento;
+        antiguedadMeses = otro.antiguedadMeses;
+        puntuacion = otro.puntuacion;
+        cantidad = otro.cantidad;
+        capacidad = otro.capacidad;
+
+        codigosDeSusReservaciones = new string[capacidad];
+        for (int i = 0; i < cantidad; ++i) {
+            codigosDeSusReservaciones[i] = otro.codigosDeSusReservaciones[i];
+        }
+    }
+    return *this;
+}
+
+
 Huesped::~Huesped() {
     delete[] codigosDeSusReservaciones;
 }
