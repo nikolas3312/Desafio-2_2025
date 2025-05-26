@@ -17,6 +17,8 @@ private:
     int capacidad;
 public:
     //constructor
+    Anfitrion();
+    Anfitrion& operator=(const Anfitrion& otro);
     Anfitrion(const string& doc, int antig, float punt = 0.0);
     Anfitrion(const string& id_, const string& nom_, const string& doc_, const string& clave,
               int antig, float punt);
@@ -34,6 +36,8 @@ public:
 
     //informacion del anfitrion
     void mostrarDetalles() const;
+
+    string toFileString() const;
 
 };
 
