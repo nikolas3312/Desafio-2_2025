@@ -84,14 +84,3 @@ void Anfitrion::mostrarDetalles() const {
         cout << " - " << codigosAlojamiento[i] << endl;
     }
 }
-
-string Anfitrion::toFileString() const {
-    ostringstream oss;
-    oss << id << ","
-        << "\"" << nombre << "\","
-        << documento << ","
-        << "\"" << contraseñaLogin << "\","
-        << antiguedadMeses << ","
-        << fixed << setprecision(1) << puntuacion;
-    return oss.str();
-}
