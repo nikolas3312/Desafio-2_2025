@@ -25,6 +25,8 @@ public:
 
     //Getters
     float getPuntuacion() const;
+    int getCantidadReservaciones() const;
+    string getCodigoReservacion(int i) const;
 
     //Setters
     void setPuntuacion(float nueva);
