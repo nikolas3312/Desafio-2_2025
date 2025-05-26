@@ -37,8 +37,6 @@ public:
     //informacion del anfitrion
     void mostrarDetalles() const;
 
-    string toFileString() const;
-
 };
 
 #endif // ANFITRION_H
