@@ -111,14 +111,3 @@ void Huesped::mostrarDetalles() const {
         cout << " - " << codigosDeSusReservaciones[i] << endl;
     }
 }
-
-string Huesped::toFileString() const {
-    ostringstream oss;
-    oss << id << ","
-        << "\"" << nombre << "\","
-        << documento << ","
-        << "\"" << credencialLogin << "\","
-        << antiguedadMeses << ","
-        << fixed << setprecision(1) << puntuacion;
-    return oss.str();
-}
