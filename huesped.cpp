@@ -1,5 +1,7 @@
 #include "huesped.h"
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 using namespace std;
 
 
@@ -59,4 +61,15 @@ void Huesped::mostrarDetalles() const {
     for (int i = 0; i < cantidad; ++i) {
         cout << " - " << codigosDeSusReservaciones[i] << endl;
     }
+}
+
+string Huesped::toFileString() const {
+    ostringstream oss;
+    oss << id << ","
+        << "\"" << nombre << "\","
+        << documento << ","
+        << "\"" << credencialLogin << "\","
+        << antiguedadMeses << ","
+        << fixed << setprecision(1) << puntuacion;
+    return oss.str();
 }
