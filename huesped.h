@@ -31,6 +31,8 @@ public:
     void agregarCodigoReservacion(const string& codigoRes);
     void eliminarCodigoReservacion(const string& codigoRes);
     void mostrarDetalles() const;
+
+    string toFileString() const;
 };
 
 #endif // HUESPED_H
