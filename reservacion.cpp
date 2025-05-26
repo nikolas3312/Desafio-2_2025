@@ -59,3 +59,18 @@ void Reservacion::mostrarComprobante() const {
 void Reservacion::anular() {
     activa = false;
 }
+
+String Reservacion::toFileString() const {
+    ostringstream oss;
+    oss << codigo << ","
+        << codigoAlojamiento << ","
+        << documentoHuesped << ","
+        << fechaEntrada.toString() << ","
+        << duracionNoche << ","
+        << metodoPago << ","
+        << fechaPago.toString() << ","
+        << valorTotal << ","
+        << "\"" << anotaciones << "\","
+        << (activa ? "1" : "0");                //1 si es verdadero, 0 si es falso
+    return oss.str();
+}
