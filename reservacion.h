@@ -38,6 +38,8 @@ public:
     void mostrarComprobante() const;
     void anular();
 
+    string toFileString() const;
+
 };
 
 #endif // RESERVACION_H
