@@ -57,6 +57,18 @@ float Huesped::getPuntuacion() const {
     return puntuacion;
 }
 
+int Huesped::getCantidadReservaciones() const {
+    return cantidad;
+}
+
+string Huesped::getCodigoReservacion(int i) const {
+    if (i >= 0 && i < cantidad) {
+        return codigosDeSusReservaciones[i];
+    } else {
+        return "";
+    }
+}
+
 void Huesped::setPuntuacion(float nueva) {
     if (nueva >= 0.0 && nueva <= 5.0) {
         puntuacion = nueva;
