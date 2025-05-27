@@ -10,6 +10,8 @@
 
 class GestorUdeaStay {
 private:
+    Fecha parsearStringAFechaInterno(const std::string& strFecha);
+    int parsearLineaCSVInterno(const std::string& linea, std::string campos[], int numCamposEsperados);
     // Colecciones de datos principales
     Alojamiento* todosAlojamientos;
     int cantidadAlojamientos;

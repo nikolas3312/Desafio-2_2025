@@ -326,12 +326,90 @@ void GestorUdeaStay::cargarHuespedesDesdeArchivo() {
     cout << "Huéspedes cargados: " << cantidadHuespedes << endl;
 }
 void GestorUdeaStay::cargarReservacionesActivasDesdeArchivo() {
-    // TODO: Similar para reservaciones activas.
-    cout << "Cargando reservaciones activas (por implementar)..." << endl;
+    incrementarContadorIteraciones();
+    ifstream archivo(archivoReservaciones);
+    string linea;
+
+    if (!archivo.is_open()) {
+        cerr << "Error: No se pudo abrir el archivo de reservaciones: " << archivoReservaciones << endl;
+        return;
+    }
+
+    if (!getline(archivo, linea) || linea.empty()) { // Omitir cabecera y verificar si el archivo está vacío después
+        cerr << "Error: Archivo de reservaciones vacío o cabecera ilegible." << endl;
+        archivo.close();
+        return;
+    }
+    incrementarContadorIteraciones(); // Por leer la cabecera
+
+    // Formato CSV esperado:
+    // CodigoReservacion,CodigoAlojamiento,DocumentoHuesped,FechaEntrada,DuracionNoches,MetodoPago,FechaPago,MontoPagado,Anotaciones,Activa
+    const int NUM_CAMPOS = 10;
+    string campos[NUM_CAMPOS];
+
+    while (getline(archivo, linea)) {
+        incrementarContadorIteraciones(); // Por leer una línea de datos
+        if (linea.empty()) continue; // Saltar líneas vacías
+
+        int camposLeidos = parsearLineaCSVInterno(linea, campos, NUM_CAMPOS);
+
+        if (camposLeidos == NUM_CAMPOS) {
+            // Campos de string directos
+            string codigoRes = campos[0];
+            string codigoAloja = campos[1];
+            string docHuesped = campos[2];
+            string metodoPago = campos[5];
+            string anotaciones = campos[8]; // El constructor de Reservacion maneja el truncamiento
+
+            // Campos que necesitan conversión
+            Fecha fechaEntrada;
+            int duracionNoches;
+            Fecha fechaPago;
+            int montoPagado; // Basado en el constructor de Reservacion que usa 'int valortotal'
+            bool activa;
+
+            try {
+                fechaEntrada = parsearStringAFechaInterno(campos[3]); // Usa el helper
+                duracionNoches = stoi(campos[4]);
+                fechaPago = parsearStringAFechaInterno(campos[6]);   // Usa el helper
+                montoPagado = stoi(campos[7]); // Si es int, o stod si es double
+                activa = (campos[9] == "1" || campos[9] == "true"); // Asumiendo 1/true para activa
+                incrementarContadorIteraciones(3); // Por stoi, stoi/stod, y la comparación bool
+            } catch (const std::exception& e) {
+                cerr << "Error [GestorUdeaStay]: Error al convertir datos para reservación en línea: " << linea << ". Error: " << e.what() << endl;
+                incrementarContadorIteraciones(); // Por manejo de excepción
+                continue; // Saltar esta línea
+            }
+
+            // Solo cargar si la reservación está marcada como activa en el archivo
+            if (activa) {
+                asegurarCapacidadReservaciones(); // Llama al método de redimensionamiento
+
+                // Crear el objeto Reservacion usando el constructor parametrizado
+                // El constructor de Reservacion que me mostraste es:
+                // Reservacion(cod, codigoAloja, docHues, metPago, entrada, duracionNoche, pago, valortotal, anot)
+                // y 'activa' se establece a true internamente en ese constructor.
+                todasReservaciones[cantidadReservaciones++] = Reservacion(
+                    codigoRes, codigoAloja, docHuesped, metodoPago,
+                    fechaEntrada, duracionNoches, fechaPago, montoPagado,
+                    anotaciones
+                    );
+                incrementarContadorIteraciones(); // Por la creación y asignación del objeto
+            } else {
+                // Si la reservación en el archivo NO está activa, no la cargamos en la lista de activas.
+                // Podría considerarse para cargarla directamente en una lista de históricas si fuera necesario aquí.
+                incrementarContadorIteraciones(); // Por la decisión de no cargarla
+            }
+        } else {
+            cerr << "Advertencia [GestorUdeaStay]: Línea con formato incorrecto en " << archivoReservaciones << ": " << linea
+                 << " (Esperados " << NUM_CAMPOS << " campos, encontrados " << camposLeidos << ")" << endl;
+            incrementarContadorIteraciones(); // Por el manejo de la línea incorrecta
+        }
+    }
+
+    archivo.close();
+    cout << "Reservaciones activas cargadas: " << cantidadReservaciones << endl;
 }
-
-// --- Implementaciones de los Métodos de Guardado (Esqueletos) ---
-
 void GestorUdeaStay::guardarReservacionesActivasEnArchivo() const {
     // TODO: Abrir archivoReservaciones en modo escritura, iterar por todasReservaciones,
     //       llamar a Reservacion::toFileString() (¡DEBE EXISTIR!) y escribir la línea.
