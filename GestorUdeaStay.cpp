@@ -411,17 +411,46 @@ void GestorUdeaStay::cargarReservacionesActivasDesdeArchivo() {
     cout << "Reservaciones activas cargadas: " << cantidadReservaciones << endl;
 }
 void GestorUdeaStay::guardarReservacionesActivasEnArchivo() const {
-    // TODO: Abrir archivoReservaciones en modo escritura, iterar por todasReservaciones,
-    //       llamar a Reservacion::toFileString() (¡DEBE EXISTIR!) y escribir la línea.
-    cout << "Guardando reservaciones activas (por implementar)..." << endl;
+    incrementarContadorIteraciones();
+    ofstream archivo(archivoReservaciones);
+
+    if (!archivo.is_open()) {
+        cerr << "Error [GestorUdeaStay]: No se pudo abrir el archivo '" << archivoReservaciones
+             << "' para guardar las reservaciones activas." << endl;
+        incrementarContadorIteraciones();
+        return;
+    }
+
+    archivo << "CodigoReservacion,CodigoAlojamiento,DocumentoHuesped,FechaEntrada,DuracionNoches,MetodoPago,FechaPago,MontoPagado,Anotaciones,Activa\n";
+    incrementarContadorIteraciones();
+
+    for (int i = 0; i < cantidadReservaciones; ++i) {
+        incrementarContadorIteraciones();
+        // Asumiendo que Reservacion tiene el método toFileString() implementado por tu compañero
+        archivo << todasReservaciones[i].toFileString() << "\n";
+        incrementarContadorIteraciones();
+    }
+
+    archivo.close();
 }
 
 void GestorUdeaStay::agregarReservacionAHistoricoEnArchivo(const Reservacion& reservacion) const {
-    // TODO: Abrir archivoHistorico en modo append (añadir),
-    //       llamar a reservacion.toFileString() y escribir la línea.
-    cout << "Agregando reservación al histórico (por implementar)..." << endl;
-}
+    incrementarContadorIteraciones();
+    ofstream archivo(archivoHistorico, ios::app);
 
+    if (!archivo.is_open()) {
+        cerr << "Error [GestorUdeaStay]: No se pudo abrir o crear el archivo histórico '"
+             << archivoHistorico << "' para añadir la reservación." << endl;
+        incrementarContadorIteraciones();
+        return;
+    }
+
+    // Asumiendo que Reservacion tiene el método toFileString() implementado por tu compañero
+    archivo << reservacion.toFileString() << "\n";
+    incrementarContadorIteraciones();
+
+    archivo.close();
+}
 
 // --- Implementaciones de los Métodos de Redimensionamiento (Esqueletos) ---
 // Estos manejarán el crecimiento de los arreglos dinámicos.
