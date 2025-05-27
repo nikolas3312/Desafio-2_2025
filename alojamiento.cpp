@@ -26,8 +26,8 @@ Alojamiento::Alojamiento() :
     direccion("No especificada"),
     departamento("No especificado"),
     municipio("No especificado"),
-    tipoAlojamiento("No especificado"), // Podría ser "Casa" o "Apartamento" [cite: 20]
-    amenidades("Ninguna"),             // Ejemplo: "ascensor, piscina, etc." [cite: 20]
+    tipoAlojamiento("No especificado"), // Podría ser "Casa" o "Apartamento"
+    amenidades("Ninguna"),             // Ejemplo: "ascensor, piscina, etc."
     precioPorNoche(0.0),
     anfitrionResponsableID("SIN_ANFITRION") {
     // El constructor por defecto es útil, pero se debe tener cuidado
@@ -129,7 +129,7 @@ void Alojamiento::setTipoAlojamiento(const string& tipo) {
         cerr << "ADVERTENCIA [Alojamiento]: Tipo de alojamiento no puede ser vacío para ID: " << this->codigoID << ". No se realizó el cambio." << endl;
         return;
     }
-    // Podríamos verificar si 'tipo' es uno de los valores esperados ("Casa", "Apartamento") [cite: 20]
+    // Podríamos verificar si 'tipo' es uno de los valores esperados ("Casa", "Apartamento")
     // if (tipo != "Casa" && tipo != "Apartamento") {
     //     cerr << "ADVERTENCIA [Alojamiento]: Tipo de alojamiento '" << tipo << "' no reconocido para ID: " << this->codigoID << ". Se mantuvo el anterior." << endl;
     //     return;
