@@ -1,0 +1,11 @@
+HuespedID,NombreCompleto,Documento,CredencialLogin,AntiguedadMeses,Puntuacion
+HUE001,"María Gómez",123456789,"maria2025",12,4.6
+HUE002,"Juan Pérez",234567890,"juanp2024",18,4.3
+HUE003,"Laura Restrepo",345678901,"laurest12",6,4.8
+HUE004,"Carlos Jiménez",456789012,"cjimenez",24,4.5
+HUE005,"Ana Torres",567890123,"anaT2023",8,4.7
+HUE006,"Esteban Ruiz",678901234,"estebRz",20,4.4
+HUE007,"Paula Díaz",789012345,"pdiaz95",10,4.9
+HUE008,"Sofía Martínez",890123456,"sofimtz",7,4.2
+HUE009,"Miguel Herrera",901234567,"miguelH",5,4.0
+HUE010,"Isabel Castaño",112233445,"icastano",15,4.6
