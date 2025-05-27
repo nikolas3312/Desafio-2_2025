@@ -444,13 +444,65 @@ void GestorUdeaStay::agregarReservacionAHistoricoEnArchivo(const Reservacion& re
         incrementarContadorIteraciones();
         return;
     }
-
     // Asumiendo que Reservacion tiene el método toFileString() implementado por tu compañero
     archivo << reservacion.toFileString() << "\n";
     incrementarContadorIteraciones();
 
     archivo.close();
 }
+bool GestorUdeaStay::actualizarArchivoHistorico(Fecha fechaCorte) {
+    incrementarContadorIteraciones();
+
+    if (cantidadReservaciones == 0) {
+        cout << "No hay reservaciones activas para procesar." << endl;
+        return true;
+    }
+
+    Reservacion* nuevasReservacionesActivas = nullptr;
+    int nuevaCantidadActivas = 0;
+    int nuevoCupoActivas = cupoReservaciones;
+
+    if (nuevoCupoActivas > 0) {
+        nuevasReservacionesActivas = new Reservacion[nuevoCupoActivas];
+        incrementarContadorIteraciones();
+    } else {
+        cout << "No hay reservaciones activas (cupo 0)." << endl;
+        return true;
+    }
+
+    int movidasAlHistorico = 0;
+
+    for (int i = 0; i < cantidadReservaciones; ++i) {
+        incrementarContadorIteraciones();
+
+        Fecha fechaSalida = todasReservaciones[i].getFechaSalida();
+        incrementarContadorIteraciones();
+
+        if (fechaSalida.esMenor(fechaCorte)) {
+            agregarReservacionAHistoricoEnArchivo(todasReservaciones[i]);
+            movidasAlHistorico++;
+            incrementarContadorIteraciones();
+        } else {
+            if (nuevasReservacionesActivas != nullptr) {
+                nuevasReservacionesActivas[nuevaCantidadActivas++] = todasReservaciones[i];
+            }
+            incrementarContadorIteraciones();
+        }
+    }
+
+    delete[] todasReservaciones;
+    incrementarContadorIteraciones();
+
+    todosReservaciones = nuevasReservacionesActivas;
+    cantidadReservaciones = nuevaCantidadActivas;
+    cupoReservaciones = nuevoCupoActivas;
+
+    cout << movidasAlHistorico << " reservaciones han sido movidas al archivo histórico." << endl;
+    cout << cantidadReservaciones << " reservaciones permanecen activas." << endl;
+
+    return true;
+}
+
 
 // --- Implementaciones de los Métodos de Redimensionamiento (Esqueletos) ---
 // Estos manejarán el crecimiento de los arreglos dinámicos.
