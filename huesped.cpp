@@ -57,6 +57,10 @@ float Huesped::getPuntuacion() const {
     return puntuacion;
 }
 
+string Huesped::getContrasena() const {
+    return credencialLogin;
+}
+
 int Huesped::getCantidadReservaciones() const {
     return cantidad;
 }
