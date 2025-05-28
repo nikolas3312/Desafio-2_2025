@@ -492,7 +492,7 @@ bool GestorUdeaStay::actualizarArchivoHistorico(Fecha fechaCorte) {
     delete[] todasReservaciones;
     incrementarContadorIteraciones();
 
-    todosReservaciones = nuevasReservacionesActivas;
+    todasReservaciones = nuevasReservacionesActivas;
     cantidadReservaciones = nuevaCantidadActivas;
     cupoReservaciones = nuevoCupoActivas;
 
@@ -620,7 +620,7 @@ void GestorUdeaStay::mostrarEstadoRecursosActual() const {
         memoriaTotalObjetos += (size_t)cantidadHuespedes * sizeof(Huesped);
         // Similar para Huesped si tiene arreglos dinámicos internos (codigosDeSusReservaciones)
     }
-    if (todosReservaciones != nullptr) {
+    if (todasReservaciones != nullptr) {
         memoriaTotalObjetos += (size_t)cantidadReservaciones * sizeof(Reservacion);
     }
 

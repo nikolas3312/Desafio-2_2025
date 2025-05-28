@@ -60,7 +60,7 @@ void Reservacion::anular() {
     activa = false;
 }
 
-String Reservacion::toFileString() const {
+string Reservacion::toFileString() const {
     ostringstream oss;
     oss << codigo << ","
         << codigoAlojamiento << ","

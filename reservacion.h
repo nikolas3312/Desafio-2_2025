@@ -1,6 +1,7 @@
 #ifndef RESERVACION_H
 #define RESERVACION_H
 #include <string>
+#include <sstream>
 #include "fecha.h"
 using namespace std;
 
