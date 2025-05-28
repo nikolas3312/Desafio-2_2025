@@ -25,6 +25,7 @@ public:
 
     //Getters
     float getPuntuacion() const;
+    string getContrasena() const; //se agrego para poder crear el login
     int getCantidadReservaciones() const;
     string getCodigoReservacion(int i) const;
 
