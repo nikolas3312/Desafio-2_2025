@@ -1,0 +1,11 @@
+CodigoReservacion,CodigoAlojamiento,DocumentoHuesped,FechaEntrada,DuracionNoches,MetodoPago,FechaPago,MontoPagado,Anotaciones,Activa
+RES001,ALO001,123456789,"01/06/2025",3,Nequi,"31/05/2025",540000,"",1
+RES002,ALO004,234567890,"10/06/2025",2,Tarjeta,"08/06/2025",320000,"Desea check-in temprano",1
+RES003,ALO005,345678901,"15/06/2025",4,Efectivo,"14/06/2025",680000,"",1
+RES004,ALO007,456789012,"20/06/2025",2,Tarjeta,"19/06/2025",440000,"Solicita guía turística",1
+RES005,ALO010,567890123,"25/06/2025",5,Nequi,"23/06/2025",725000,"Incluye desayuno",1
+RES006,ALO012,678901234,"30/06/2025",3,Tarjeta,"29/06/2025",405000,"",1
+RES007,ALO013,789012345,"05/07/2025",1,Efectivo,"05/07/2025",195000,"Solo una noche",1
+RES008,ALO016,890123456,"07/07/2025",4,Nequi,"06/07/2025",620000,"Viaja con mascota",1
+RES009,ALO017,901234567,"10/07/2025",3,Tarjeta,"08/07/2025",570000,"Necesita parqueadero",1
+RES010,ALO020,112233445,"15/07/2025",2,Efectivo,"14/07/2025",290000,"",1
