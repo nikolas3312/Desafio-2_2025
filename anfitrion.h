@@ -27,6 +27,7 @@ public:
 
     //Getters
     string getDocumento() const;
+    string getContrasena() const; // para poder crear el login
     float getPuntuacion() const;
     //Setters
     void setPuntuacion(float nueva);
