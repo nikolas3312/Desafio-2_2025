@@ -54,6 +54,9 @@ Anfitrion::~Anfitrion() {
 string Anfitrion::getDocumento() const {
     return documento;
 }
+string Anfitrion::getContrasena() const {
+    return contraseñaLogin;
+}
 
 float Anfitrion::getPuntuacion() const {
     return puntuacion;
