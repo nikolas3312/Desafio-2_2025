@@ -1,6 +1,5 @@
 // --- GestorUdeaStay.cpp ---
 // Implementación de la clase GestorUdeaStay, el núcleo del sistema UdeaStay.
-
 #include "GestorUdeaStay.h"
 #include <iostream>     // Para std::cout, std::cin, std::endl
 #include <fstream>      // Para std::ifstream, std::ofstream (manejo de archivos)

@@ -98,7 +98,6 @@ public:
 
     // --- Funcionalidades para Anfitriones ---
     void mostrarReservacionesDelAnfitrion(Fecha fechaDesde, Fecha fechaHasta) const; // Muestra las del anfitrión logueado
-    bool moverReservacionesAntiguasAHistorico(Fecha fechaCorte);
     bool actualizarArchivoHistorico(Fecha fechaCorte);
     // --- Funcionalidades Comunes ---
     bool cancelarUnaReservacion(const std::string& codigoReservacion); // Verifica permisos antes de anular
