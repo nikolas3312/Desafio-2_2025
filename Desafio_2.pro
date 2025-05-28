@@ -4,7 +4,7 @@ CONFIG -= app_bundle
 CONFIG += qt
 
 SOURCES += \
-    GestorIdeaStay.cpp \
+    GestorUdeaStay.cpp \
     alojamiento.cpp \
     fecha.cpp \
     anfitrion.cpp \
@@ -13,7 +13,7 @@ SOURCES += \
     reservacion.cpp
 
 HEADERS += \
-    GestorIdeaStay.h \
+    GestorUdeaStay.h \
     alojamiento.h \
     fecha.h \
     anfitrion.h \
