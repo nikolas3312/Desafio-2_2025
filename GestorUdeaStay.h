@@ -37,7 +37,7 @@ private:
     // La memoria se calculará bajo demanda o se actualizará en puntos clave
 
     // Nombres de los archivos de datos
-    const std::string archivoAlojamientos = "Alojamientos.csv";
+    const std::string archivoAlojamientos = ""C:/Users/Nikolas Ortega/Desktop/desafio#2_2025/Desafio-2_2025/build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/Alojamientos.csv"";
     const std::string archivoAnfitriones = "Anfitriones.csv";
     const std::string archivoHuespedes = "Huespedes.csv";
     const std::string archivoReservaciones = "Reservaciones.csv";
