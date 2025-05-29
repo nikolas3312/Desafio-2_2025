@@ -657,5 +657,52 @@ void GestorUdeaStay::incrementarContadorIteraciones(unsigned long long cantidad)
 }
 
 
+//LOGIN
+
+bool GestorUdeaStay::intentarLoginAnfitrion(const string &documento, const string &contrasena) {
+    for (int i = 0; i < cantidadAnfitriones; ++i) {
+        if (todosAnfitriones[i].getDocumento() == documento) {
+            if (todosAnfitriones[i].getContrasena() == contrasena) {
+                anfitrionLogueado = &todosAnfitriones[i];
+                return true;
+            } else {
+                return false; //Para cuando el documento sea correcto pero la contraseña sea incorrecta
+            }
+        }
+    }
+    return false; // Si no se encontro ningun anfitrion con ese numero de documento
+}
+
+bool GestorUdeaStay::intentarLoginHuesped(const string &documento, const string &contrasena) {
+    for (int i = 0; i < cantidadHuespedes; ++i) {
+        if (todosHuespedes[i].getDocumento() == documento) {
+            if (todosHuespedes[i].getContrasena() == contrasena) {
+                huespedLogueado = &todosHuespedes[i];
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
+void GestorUdeaStay::cerrarSesion() {
+    anfitrionLogueado = nullptr;
+    huespedLogueado = nullptr;
+}
+
+bool GestorUdeaStay::haySesionHuespedActiva() const {
+    return huespedLogueado != nullptr;
+}
+
+const Anfitrion* GestorUdeaStay::getAnfitrionActual() const {
+    return anfitrionLogueado;
+}
+
+const Huesped* GestorUdeaStay::getHuespedActual() const {
+    return huespedLogueado;
+}
+
 // TODO: Implementar el resto de los métodos declarados en GestorUdeaStay.h
 // (Login, búsquedas, crear reserva, anular, actualizar histórico, etc.)
