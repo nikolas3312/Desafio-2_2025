@@ -50,7 +50,9 @@ Anfitrion::Anfitrion() {
 Anfitrion::~Anfitrion() {
     delete[] codigosAlojamiento;
 }
-
+string Anfitrion::getNombre() const {
+    return nombre;
+}
 string Anfitrion::getDocumento() const {
     return documento;
 }

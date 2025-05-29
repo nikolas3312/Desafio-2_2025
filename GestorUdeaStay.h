@@ -37,11 +37,11 @@ private:
     // La memoria se calculará bajo demanda o se actualizará en puntos clave
 
     // Nombres de los archivos de datos
-    const std::string archivoAlojamientos = "alojamientos.csv";
-    const std::string archivoAnfitriones = "anfitriones.csv";
-    const std::string archivoHuespedes = "huespedes.csv";
-    const std::string archivoReservaciones = "reservaciones.csv";
-    const std::string archivoHistorico = "historico_reservaciones.csv";
+    const std::string archivoAlojamientos = "Alojamientos.csv";
+    const std::string archivoAnfitriones = "Anfitriones.csv";
+    const std::string archivoHuespedes = "Huespedes.csv";
+    const std::string archivoReservaciones = "Reservaciones.csv";
+    const std::string archivoHistorico = "Historico.csv";
 
     // --- Métodos de ayuda internos ---
     // Para manejar el tamaño de los arreglos dinámicos

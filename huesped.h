@@ -25,6 +25,7 @@ public:
     ~Huesped();
 
     //Getters
+    string getNombre() const;
     string getDocumento() const;
     float getPuntuacion() const;
     string getContrasena() const; //se agrego para poder crear el login

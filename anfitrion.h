@@ -26,6 +26,7 @@ public:
     ~Anfitrion();
 
     //Getters
+    string getNombre()const;
     string getDocumento() const;
     string getContrasena() const; // para poder crear el login
     float getPuntuacion() const;

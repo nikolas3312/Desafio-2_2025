@@ -66,6 +66,9 @@ Huesped& Huesped::operator=(const Huesped& otro) {
 Huesped::~Huesped() {
     delete[] codigosDeSusReservaciones;
 }
+string Huesped::getNombre() const {
+    return nombre;
+}
 string Huesped::getDocumento() const {
     return documento;
 }
