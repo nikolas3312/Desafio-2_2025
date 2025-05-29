@@ -20,10 +20,10 @@ private:
     bool activa;
 public:
     //Constructores
+    Reservacion();
     Reservacion(const string& cod, const string& codigoAloja, const string& docHues,
                 const string& metPago, Fecha entrada, int duracionNoche, Fecha pago, int valortotal,
                 const string& anot = "");
-
     //Getters
     string getCodigo() const;
     Fecha getFechaEntrada() const;

@@ -114,14 +114,34 @@ void GestorUdeaStay::inicializarSistema() {
  * Los datos de alojamientos, anfitriones y huéspedes no se reescriben
  * según la decisión de no tener toFileString() y asumir que son estáticos post-carga.
  */
-void GestorUdeaStay::finalizarSistema() const {
+void GestorUdeaStay::finalizarSistema()  {
     cout << "Guardando datos modificados del sistema..." << endl;
     guardarReservacionesActivasEnArchivo();
     // No se guardan alojamientos, anfitriones, huéspedes porque se asumen estáticos post-carga.
     // Si esta lógica cambia (ej. puntuaciones actualizadas deben persistir), se añadirían aquí.
     cout << "Datos guardados." << endl;
 }
+Fecha GestorUdeaStay::parsearStringAFechaInterno(const string& strFecha) {
+    incrementarContadorIteraciones(); // Es correcto poder llamar a esto si es un método de la clase
 
+    if (strFecha.length() != 10 || strFecha[2] != '/' || strFecha[5] != '/') {
+        cerr << "Error [GestorUdeaStay]: Formato de fecha inválido '" << strFecha << "'. Se esperaba dd/mm/aaaa." << endl;
+        return Fecha(); // Devuelve fecha por defecto
+    }
+    try {
+        int dia = stoi(strFecha.substr(0, 2));
+        int mes = stoi(strFecha.substr(3, 2));
+        int anio = stoi(strFecha.substr(6, 4));
+        incrementarContadorIteraciones(3);
+
+        Fecha fechaObtenida(dia, mes, anio);
+        return fechaObtenida;
+    } catch (const std::exception& e) {
+        cerr << "Error [GestorUdeaStay]: Excepción al convertir string a fecha '" << strFecha << "'. Error: " << e.what() << endl;
+        incrementarContadorIteraciones();
+        return Fecha();
+    }
+}
 // --- Implementaciones de los Métodos de Carga (Esqueletos) ---
 // Estos se llenarán con la lógica de lectura de archivos y parseo de CSV.
 int GestorUdeaStay::parsearLineaCSVInterno(const string& linea, string campos[], int numCamposEsperados) {
@@ -409,7 +429,7 @@ void GestorUdeaStay::cargarReservacionesActivasDesdeArchivo() {
     archivo.close();
     cout << "Reservaciones activas cargadas: " << cantidadReservaciones << endl;
 }
-void GestorUdeaStay::guardarReservacionesActivasEnArchivo() const {
+void GestorUdeaStay::guardarReservacionesActivasEnArchivo()  {
     incrementarContadorIteraciones();
     ofstream archivo(archivoReservaciones);
 
@@ -425,7 +445,6 @@ void GestorUdeaStay::guardarReservacionesActivasEnArchivo() const {
 
     for (int i = 0; i < cantidadReservaciones; ++i) {
         incrementarContadorIteraciones();
-        // Asumiendo que Reservacion tiene el método toFileString() implementado por tu compañero
         archivo << todasReservaciones[i].toFileString() << "\n";
         incrementarContadorIteraciones();
     }
@@ -433,7 +452,7 @@ void GestorUdeaStay::guardarReservacionesActivasEnArchivo() const {
     archivo.close();
 }
 
-void GestorUdeaStay::agregarReservacionAHistoricoEnArchivo(const Reservacion& reservacion) const {
+void GestorUdeaStay::agregarReservacionAHistoricoEnArchivo(const Reservacion& reservacion) {
     incrementarContadorIteraciones();
     ofstream archivo(archivoHistorico, ios::app);
 

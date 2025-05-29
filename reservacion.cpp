@@ -2,6 +2,13 @@
 #include <iostream>
 using namespace std;
 
+Reservacion::Reservacion() :
+    codigo(""), codigoAlojamiento(""), documentoHuesped(""),
+    metodoPago(""), fechaEntrada(), duracionNoche(0),
+    fechaPago(), valorTotal(0), activa(false), anotaciones("") {
+    // Inicializa los miembros a valores seguros o vacíos.
+    // La clase Fecha ya tiene un constructor por defecto.
+}
 Reservacion::Reservacion(const string& cod, const string& codigoAloja, const string& docHues, const string& metPago,
                          Fecha entrada, int duracionNoche, Fecha pago, int valortotal,
                          const string& anot)

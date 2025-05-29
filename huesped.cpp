@@ -4,7 +4,21 @@
 #include <iomanip>
 using namespace std;
 
-
+Huesped::Huesped() :
+    id(""), // O un ID por defecto como "HUE_DEF"
+    nombre("Desconocido"),
+    credencialLogin(""),
+    documento(""),
+    antiguedadMeses(0),
+    puntuacion(0.0f), // Usar 0.0f para float
+    cantidad(0),
+    capacidad(2) // O un valor inicial que consideres apropiado para la capacidad
+{
+    // Es crucial inicializar el arreglo dinámico aquí también
+    codigosDeSusReservaciones = new string[capacidad];
+    // No necesitas un bucle para inicializar los strings, new string[] ya los crea vacíos.
+    // cout << "Constructor por defecto de Huesped llamado." << endl; // Para depuración
+}
 Huesped::Huesped(const string& id_, const string& nom_, const string& doc, const string& clave, int antig, float punt)
     : id(id_), nombre(nom_), documento(doc), credencialLogin(clave), antiguedadMeses(antig), puntuacion(punt){
     capacidad = 2;

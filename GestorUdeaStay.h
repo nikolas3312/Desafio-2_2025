@@ -57,8 +57,8 @@ private:
     void cargarReservacionesActivasDesdeArchivo();
 
     // Para guardar las reservaciones (activas y al histórico)
-    void guardarReservacionesActivasEnArchivo() const;
-    void agregarReservacionAHistoricoEnArchivo(const Reservacion& reservacion) const;
+    void guardarReservacionesActivasEnArchivo();
+    void agregarReservacionAHistoricoEnArchivo(const Reservacion& reservacion);
 
     // Para buscar entidades internamente
     Anfitrion* encontrarAnfitrionPorDocumento(const std::string& documento) const;
@@ -78,7 +78,7 @@ public:
 
     // --- Carga y Guardado de Datos (principalmente interno) ---
     void inicializarSistema(); // Carga todos los datos al inicio
-    void finalizarSistema() const;   // Guarda los datos necesarios al salir
+    void finalizarSistema();   // Guarda los datos necesarios al salir
 
     // --- Login y Sesión ---
     bool intentarLoginAnfitrion(const std::string& documento, const std::string& contrasena);

@@ -16,6 +16,7 @@ private:
     int cantidad;
     int capacidad;
 public:
+    Huesped();
     Huesped(const Huesped& otro);                     // Constructor por copia
     Huesped& operator=(const Huesped& otro);          // Operador de asignación
     Huesped(const string& doc, int antig, float punt = 0.0);
