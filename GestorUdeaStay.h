@@ -1,6 +1,5 @@
 #ifndef GESTOR_UDEASTAY_H
 #define GESTOR_UDEASTAY_H
-
 #include <string>
 #include "Fecha.h"
 #include "Alojamiento.h"

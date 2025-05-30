@@ -8,8 +8,9 @@ class Anfitrion
 private:
     string id;
     string nombre;
-    string contraseñaLogin;
     string documento;
+    string contraseñaLogin;
+
     int antiguedadMeses;
     float puntuacion;
     string* codigosAlojamiento;
@@ -26,6 +27,7 @@ public:
     ~Anfitrion();
 
     //Getters
+    string getId() const;
     string getNombre()const;
     string getDocumento() const;
     string getContrasena() const; // para poder crear el login

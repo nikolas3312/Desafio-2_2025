@@ -1,9 +1,11 @@
+
 // --- main_prueba_gestor.cpp ---
 #include <iostream>
 #include <string>
 #include <limits> // Para limpiar el buffer de cin
 #include "GestorUdeaStay.h" // Tu clase principal
 #include "Fecha.h"          // Para crear objetos Fecha para las pruebas
+
 
 using namespace std;
 
@@ -53,6 +55,7 @@ int mostrarMenuHuesped(const Huesped* huesped) {
 
 
 int main() {
+
     cout << "Creando instancia de GestorUdeaStay..." << endl;
     GestorUdeaStay gestor; // Esto llamará al constructor y a inicializarSistema()
     cout << "Instancia de GestorUdeaStay creada y datos iniciales cargados." << endl;

@@ -7,8 +7,8 @@ using namespace std;
 Huesped::Huesped() :
     id(""), // O un ID por defecto como "HUE_DEF"
     nombre("Desconocido"),
-    credencialLogin(""),
     documento(""),
+    credencialLogin(""),
     antiguedadMeses(0),
     puntuacion(0.0f), // Usar 0.0f para float
     cantidad(0),
@@ -65,6 +65,9 @@ Huesped& Huesped::operator=(const Huesped& otro) {
 
 Huesped::~Huesped() {
     delete[] codigosDeSusReservaciones;
+}
+std::string Huesped::getId() const {
+    return id; // Devuelve el atributo 'id'
 }
 string Huesped::getNombre() const {
     return nombre;

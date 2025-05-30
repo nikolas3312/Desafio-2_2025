@@ -50,6 +50,9 @@ Anfitrion::Anfitrion() {
 Anfitrion::~Anfitrion() {
     delete[] codigosAlojamiento;
 }
+std::string Anfitrion::getId() const {
+    return id; // Devuelve el atributo 'id
+}
 string Anfitrion::getNombre() const {
     return nombre;
 }

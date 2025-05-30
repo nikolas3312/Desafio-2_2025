@@ -8,8 +8,9 @@ class Huesped
 private:
     string id;
     string nombre;
-    string credencialLogin;
     string documento;
+    string credencialLogin;
+
     int antiguedadMeses;
     float puntuacion;
     string* codigosDeSusReservaciones;
@@ -25,6 +26,7 @@ public:
     ~Huesped();
 
     //Getters
+    string getId() const;
     string getNombre() const;
     string getDocumento() const;
     float getPuntuacion() const;
