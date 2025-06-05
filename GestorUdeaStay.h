@@ -60,6 +60,7 @@ private:
     void agregarReservacionAHistoricoEnArchivo(const Reservacion& reservacion);
 
     // Para buscar entidades internamente
+     Anfitrion* encontrarAnfitrionPorID(const std::string& idLogin);
     Anfitrion* encontrarAnfitrionPorDocumento(const std::string& documento) const;
     Huesped* encontrarHuespedPorDocumento(const std::string& documento) const;
     Alojamiento* encontrarAlojamientoPorCodigo(const std::string& codigo) const; // Cambiado para uso público potencial
@@ -74,13 +75,13 @@ public:
 
     // --- Gestión principal y Menús (a ser llamados desde main.cpp) ---
     void ejecutar(); // Método principal que inicia el sistema y maneja el flujo de menús
-
+    void inspeccionarDatosCargadosParaDebug() ;
     // --- Carga y Guardado de Datos (principalmente interno) ---
     void inicializarSistema(); // Carga todos los datos al inicio
     void finalizarSistema();   // Guarda los datos necesarios al salir
 
     // --- Login y Sesión ---
-    bool intentarLoginAnfitrion(const std::string& documento, const std::string& contrasena);
+    bool intentarLoginAnfitrion(const std::string& idLogin, const std::string& contrasena);
     bool intentarLoginHuesped(const std::string& documento, const std::string& contrasena);
     void cerrarSesion();
     bool haySesionAnfitrionActiva() const;

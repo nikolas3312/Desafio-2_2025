@@ -7,7 +7,7 @@
 #include <string>       // Para std::string, std::getline
 #include <limits>       // Para std::numeric_limits (limpiar buffer de cin)
 #include <algorithm>    // Para std::remove si se usa para limpiar strings (opcional)
-
+#include <cctype>
 // Usamos el namespace std para este archivo .cpp
 using namespace std;
 
@@ -58,7 +58,51 @@ GestorUdeaStay::~GestorUdeaStay() {
     // así que no se hace delete sobre ellos aquí.
     cout << "Memoria liberada." << endl;
 }
+// --- Funciones de Ayuda Estáticas para Trimming ---
+// Estas funciones operan directamente sobre el string (in-place)
 
+// Recorta espacios del inicio (in-place)
+static inline std::string& ltrim(std::string& s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+                return !std::isspace(ch);
+            }));
+    return s;
+}
+
+// Recorta espacios del final (in-place)
+static inline std::string& rtrim(std::string& s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
+                return !std::isspace(ch);
+            }).base(), s.end());
+    return s;
+}
+
+// Recorta espacios de ambos lados (in-place)
+static inline std::string& trim(std::string& s) {
+    return ltrim(rtrim(s));
+}
+// --- Fin Funciones de Trimming ---
+void GestorUdeaStay::inspeccionarDatosCargadosParaDebug()  {
+    cout << "\n--- DEBUG: Inspección de Datos Cargados ---" << endl;
+    incrementarContadorIteraciones(); // Si este método es const y el contador no es mutable, esta línea daría error.
+        // Para depuración, puedes quitar const de este método o hacer mutable el contador.
+        // O no contar iteraciones aquí.
+
+    cout << "\n--- Anfitriones en Memoria (" << cantidadAnfitriones << ") ---" << endl;
+    for (int i = 0; i < cantidadAnfitriones; ++i) {
+        // Asumiendo que Anfitrion tiene getId() y getContrasena()
+        cout << "Índice " << i << ": ID=[" << todosAnfitriones[i].getId() << "], Pass=[" << todosAnfitriones[i].getContrasena()
+             << "], Nombre=[" << todosAnfitriones[i].getNombre() << "]" << endl;
+    }
+
+    cout << "\n--- Huéspedes en Memoria (" << cantidadHuespedes << ") ---" << endl;
+    for (int i = 0; i < cantidadHuespedes; ++i) {
+        // Asumiendo que Huesped tiene getId() y getContrasena()
+        cout << "Índice " << i << ": ID=[" << todosHuespedes[i].getId() << "], Pass=[" << todosHuespedes[i].getContrasena()
+             << "], Nombre=[" << todosHuespedes[i].getNombre() << "]" << endl;
+    }
+    cout << "--- Fin Inspección ---" << endl;
+}
 // --- Gestión principal y Menús ---
 
 /**
@@ -122,11 +166,11 @@ void GestorUdeaStay::finalizarSistema()  {
     cout << "Datos guardados." << endl;
 }
 Fecha GestorUdeaStay::parsearStringAFechaInterno(const string& strFecha) {
-    incrementarContadorIteraciones(); // Es correcto poder llamar a esto si es un método de la clase
+    incrementarContadorIteraciones();
 
     if (strFecha.length() != 10 || strFecha[2] != '/' || strFecha[5] != '/') {
         cerr << "Error [GestorUdeaStay]: Formato de fecha inválido '" << strFecha << "'. Se esperaba dd/mm/aaaa." << endl;
-        return Fecha(); // Devuelve fecha por defecto
+        return Fecha();
     }
     try {
         int dia = stoi(strFecha.substr(0, 2));
@@ -142,55 +186,74 @@ Fecha GestorUdeaStay::parsearStringAFechaInterno(const string& strFecha) {
         return Fecha();
     }
 }
-// --- Implementaciones de los Métodos de Carga (Esqueletos) ---
-// Estos se llenarán con la lógica de lectura de archivos y parseo de CSV.
-int GestorUdeaStay::parsearLineaCSVInterno(const string& linea, string campos[], int numCamposEsperados) {
-    incrementarContadorIteraciones(); // Contar la llamada a esta función de parseo
 
-    stringstream ssLinea(linea);
-    string segmento;
+/**
+ * Parsea una línea de texto en formato CSV.
+ * Divide la línea en campos basados en el delimitador ',',
+ * manejando campos que están encerrados entre comillas dobles
+ * y eliminando espacios en blanco al inicio/final de cada campo.
+ */
+int GestorUdeaStay::parsearLineaCSVInterno(const string& linea, string campos[], int numCamposEsperados) {
+    incrementarContadorIteraciones();
+
+    if (linea.empty()) {
+        return 0;
+    }
+
     int indiceCampo = 0;
-    char caracter;
     string campoActual = "";
     bool dentroDeComillas = false;
 
-    for (int i = 0; i < linea.length() && indiceCampo < numCamposEsperados; ++i) {
-        incrementarContadorIteraciones(); // Por cada caracter procesado
-        caracter = linea[i];
+    for (size_t i = 0; i < linea.length(); ++i) { // Usar size_t para 'i'
+        incrementarContadorIteraciones();
+        char caracter = linea[i];
 
         if (caracter == '"') {
-            // Si encontramos una comilla, verificamos si es una comilla de escape ("")
-            // o el inicio/fin de un campo entrecomillado.
             if (dentroDeComillas && i + 1 < linea.length() && linea[i+1] == '"') {
-                campoActual += '"'; // Es una comilla doble de escape, añadir una comilla simple
-                i++; // Saltar la siguiente comilla
+                campoActual += '"';
+                i++;
             } else {
-                dentroDeComillas = !dentroDeComillas; // Cambiar estado de "dentro de comillas"
+                dentroDeComillas = !dentroDeComillas;
             }
         } else if (caracter == ',' && !dentroDeComillas) {
-            // Si es una coma y no estamos dentro de comillas, es un delimitador
             if (indiceCampo < numCamposEsperados) {
-                campos[indiceCampo++] = campoActual;
+                string campoProcesado = campoActual; // Copia para hacer trim
+                campos[indiceCampo++] = trim(campoProcesado);
+            } else {
+                // Se encontraron más comas de las esperadas para los campos, podría ser un error
+                // o simplemente ignorar el resto de la línea.
+                // Por ahora, si ya llenamos numCamposEsperados, paramos.
+                break;
             }
-            campoActual = ""; // Resetear para el siguiente campo
+            campoActual = "";
         } else {
-            // Cualquier otro caracter se añade al campo actual
             campoActual += caracter;
         }
     }
 
-    // Añadir el último campo si existe
-    if (indiceCampo < numCamposEsperados && !campoActual.empty()) {
-        campos[indiceCampo++] = campoActual;
-    } else if (indiceCampo < numCamposEsperados && linea.back() == ',') {
-        // Caso de un último campo vacío después de una coma
-        campos[indiceCampo++] = "";
+    // Añadir el último campo
+    if (indiceCampo < numCamposEsperados) {
+        string campoProcesado = campoActual; // Copia para hacer trim
+        campos[indiceCampo++] = trim(campoProcesado);
     }
 
-
-    return indiceCampo; // Devuelve el número de campos efectivamente leídos
+    return indiceCampo;
 }
-
+Anfitrion* GestorUdeaStay::encontrarAnfitrionPorID(const std::string& idLogin)  {
+    cout << "DEBUG_BUSQUEDA_ANF: Iniciando encontrarAnfitrionPorID..." << endl;
+    cout << "  ID Buscado: [" << idLogin << "] (Longitud: " << idLogin.length() << ")" << endl;
+    for (int i = 0; i < cantidadAnfitriones; ++i) {
+        incrementarContadorIteraciones(); // Si necesitas contar iteraciones
+        std::string idEnMemoria = todosAnfitriones[i].getId();
+        cout << "    Comparando con Anfitrion en memoria (Índice " << i << ") ID: [" << idEnMemoria << "] (Longitud: " << idEnMemoria.length() << ")" << endl;
+        if (idEnMemoria == idLogin) {
+            cout << "    ¡ID de Anfitrion Coincide en Índice " << i << "!" << endl;
+            return &todosAnfitriones[i];
+        }
+    }
+    cout << "  ID de Anfitrion [" << idLogin << "] NO encontrado en la colección." << endl;
+    return nullptr;
+}
 // --- Métodos de Carga de Datos ---
 void GestorUdeaStay::cargarAlojamientosDesdeArchivo() {
     incrementarContadorIteraciones();
@@ -275,14 +338,28 @@ void GestorUdeaStay::cargarAnfitrionesDesdeArchivo() {
             try {
                 antiguedad = stoi(campos[4]);
                 puntuacion = stof(campos[5]);
-                incrementarContadorIteraciones(2); // Dos conversiones
+                incrementarContadorIteraciones(2);
             } catch (const exception& e) {
                 cerr << "Error al convertir datos numéricos en línea (Anfitrión): " << linea << ". Error: " << e.what() << endl;
                 incrementarContadorIteraciones();
                 continue;
             }
-            // Asumiendo que Anfitrion tiene un constructor que toma: id, nombre, doc, clave, antig, punt
-            todosAnfitriones[cantidadAnfitriones++] = Anfitrion(campos[0], campos[1], campos[2], campos[3], antiguedad, puntuacion);
+
+            // --- AGREGAR BLOQUE DE DEPURACIÓN ANTES DE INCREMENTAR cantidadAnfitriones ---
+            cout << "DEBUG_CARGA_ANF: Procesando línea CSV para Anfitrión." << endl;
+            cout << "  CSV Raw -> ID: [" << campos[0] << "], PassLeidaCSV: [" << campos[3] << "]" << endl;
+
+            // Crear el objeto primero
+            todosAnfitriones[cantidadAnfitriones] = Anfitrion(campos[0], campos[1], campos[2], campos[3], antiguedad, puntuacion);
+
+            // Luego depurar el objeto creado
+            Anfitrion& anfitrionActual = todosAnfitriones[cantidadAnfitriones];
+            cout << "  OBJETO Anfitrion Creado -> ID via Getter: [" << anfitrionActual.getId()
+                 << "], Pass via Getter: [" << anfitrionActual.getContrasena()
+                 << "], Nombre via Getter: [" << anfitrionActual.getNombre() << "]" << endl;
+            // --- FIN BLOQUE DEPURACIÓN ---
+
+            cantidadAnfitriones++; // Incrementar después de la depuración
             incrementarContadorIteraciones();
         } else {
             cerr << "Advertencia: Línea con formato incorrecto en anfitriones: " << linea << endl;
@@ -659,19 +736,33 @@ void GestorUdeaStay::incrementarContadorIteraciones(unsigned long long cantidad)
 
 //LOGIN
 
-bool GestorUdeaStay::intentarLoginAnfitrion(const string &documento, const string &contrasena) {
-    for (int i = 0; i < cantidadAnfitriones; ++i) {
-        if (todosAnfitriones[i].getDocumento() == documento) {
-            if (todosAnfitriones[i].getContrasena() == contrasena) {
-                anfitrionLogueado = &todosAnfitriones[i];
-                return true;
-            } else {
-                return false; //Para cuando el documento sea correcto pero la contraseña sea incorrecta
-            }
+bool GestorUdeaStay::intentarLoginAnfitrion(const string &idLogin, const string &contrasenaIngresada) {
+    incrementarContadorIteraciones();
+    cout << "DEBUG_LOGIN_ANF: Iniciando intentarLoginAnfitrion..." << endl;
+    cout << "  ID Ingresado: [" << idLogin << "], Pass Ingresada: [" << contrasenaIngresada << "]" << endl;
+
+    Anfitrion* anfitrionEncontrado = encontrarAnfitrionPorID(idLogin);
+
+    if (anfitrionEncontrado != nullptr) {
+        cout << "  Anfitrion con ID [" << idLogin << "] encontrado. Verificando contraseña..." << endl;
+        std::string passAlmacenada = anfitrionEncontrado->getContrasena();
+        cout << "    Pass Ingresada por Usuario: [" << contrasenaIngresada << "] (Longitud: " << contrasenaIngresada.length() << ")" << endl;
+        cout << "    Pass Almacenada en Objeto: [" << passAlmacenada << "] (Longitud: " << passAlmacenada.length() << ")" << endl;
+
+        if (passAlmacenada == contrasenaIngresada) {
+            anfitrionLogueado = anfitrionEncontrado;
+            cout << "    ¡Contraseña CORRECTA! Login exitoso." << endl;
+            return true;
+        } else {
+            cout << "    Contraseña INCORRECTA." << endl;
+            return false;
         }
     }
-    return false; // Si no se encontro ningun anfitrion con ese numero de documento
+    // El mensaje de "NO encontrado" ya salió de encontrarAnfitrionPorID si es nullptr
+    cout << "  Login FALLIDO: Anfitrión con ID [" << idLogin << "] no encontrado (reportado por intentarLoginAnfitrion)." << endl;
+    return false;
 }
+
 
 bool GestorUdeaStay::intentarLoginHuesped(const string &documento, const string &contrasena) {
     for (int i = 0; i < cantidadHuespedes; ++i) {
