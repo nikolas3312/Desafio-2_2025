@@ -30,7 +30,8 @@ private:
     // Información de la sesión actual
     Anfitrion* anfitrionLogueado;
     Huesped* huespedLogueado;
-
+    void manejarMenuAnfitrion();
+    void manejarMenuHuesped();
     // Para medir el rendimiento
     unsigned long long contadorIteracionesGlobal; // Un contador general de operaciones
     // La memoria se calculará bajo demanda o se actualizará en puntos clave
@@ -60,7 +61,8 @@ private:
     void agregarReservacionAHistoricoEnArchivo(const Reservacion& reservacion);
 
     // Para buscar entidades internamente
-     Anfitrion* encontrarAnfitrionPorID(const std::string& idLogin);
+    Huesped* encontrarHuespedPorID(const std::string& idLogin);
+    Anfitrion* encontrarAnfitrionPorID(const std::string& idLogin);
     Anfitrion* encontrarAnfitrionPorDocumento(const std::string& documento) const;
     Huesped* encontrarHuespedPorDocumento(const std::string& documento) const;
     Alojamiento* encontrarAlojamientoPorCodigo(const std::string& codigo) const; // Cambiado para uso público potencial

@@ -104,34 +104,168 @@ void GestorUdeaStay::inspeccionarDatosCargadosParaDebug()  {
     cout << "--- Fin Inspección ---" << endl;
 }
 // --- Gestión principal y Menús ---
+void limpiarBufferEntrada() {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+void GestorUdeaStay::manejarMenuAnfitrion() {
+    int opcion = -1;
+    do {
+        cout << "\n--- Menú Anfitrión: " << anfitrionLogueado->getNombre() << " ---" << endl;
+        cout << "1. Actualizar archivo histórico" << endl;
+        cout << "2. Consultar mis reservaciones" << endl; // Por implementar
+        cout << "3. Anular una reservación" << endl;       // Por implementar
+        cout << "4. Ver estado de recursos" << endl;
+        cout << "0. Cerrar Sesión" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
 
+        if (cin.fail()) {
+            cout << "Entrada inválida. Por favor ingrese un número." << endl;
+            cin.clear();
+            opcion = -1; // Resetear opción para evitar bucle infinito
+        }
+        limpiarBufferEntrada();
+
+        switch (opcion) {
+        case 1: { // Actualizar Histórico
+            cout << "--- Actualizar Histórico ---" << endl;
+            int dia, mes, anio;
+            cout << "Ingrese la fecha de corte (formato dd mm aaaa): ";
+            cin >> dia >> mes >> anio;
+            limpiarBufferEntrada();
+
+            Fecha fechaCorte(dia, mes, anio);
+            // Asumiendo que el constructor de Fecha maneja la validez
+            actualizarArchivoHistorico(fechaCorte);
+            incrementarContadorIteraciones();
+            break;
+        }
+        case 2:
+            cout << "Funcionalidad 'Consultar mis reservaciones' por implementar." << endl;
+            // Aquí iría la llamada a mostrarReservacionesDelAnfitrion(...)
+            break;
+        case 3:
+            cout << "Funcionalidad 'Anular una reservación' por implementar." << endl;
+            // Aquí iría la llamada a cancelarUnaReservacion(...)
+            break;
+        case 4:
+            mostrarEstadoRecursosActual();
+            break;
+        case 0:
+            cerrarSesion();
+            cout << "Sesión de Anfitrión cerrada." << endl;
+            break;
+        default:
+            cout << "Opción no válida. Intente de nuevo." << endl;
+            break;
+        }
+    } while (opcion != 0);
+}
+void GestorUdeaStay::manejarMenuHuesped() {
+    int opcion = -1;
+    do {
+        cout << "\n--- Menú Huésped: " << huespedLogueado->getNombre() << " ---" << endl;
+        cout << "1. Buscar alojamiento disponible" << endl; // Por implementar
+        cout << "2. Crear nueva reservación por código" << endl; // Por implementar
+        cout << "3. Anular una de mis reservaciones" << endl;  // Por implementar
+        cout << "4. Ver estado de recursos" << endl;
+        cout << "0. Cerrar Sesión" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        if (cin.fail()) {
+            cout << "Entrada inválida. Por favor ingrese un número." << endl;
+            cin.clear();
+            opcion = -1;
+        }
+        limpiarBufferEntrada();
+
+        switch (opcion) {
+        case 1:
+            cout << "Funcionalidad 'Buscar alojamiento disponible' por implementar." << endl;
+            // Aquí iría la llamada a mostrarAlojamientosDisponibles(...)
+            break;
+        case 2:
+            cout << "Funcionalidad 'Crear nueva reservación por código' por implementar." << endl;
+            // Aquí iría la llamada a crearNuevaReservacion(...)
+            break;
+        case 3:
+            cout << "Funcionalidad 'Anular una de mis reservaciones' por implementar." << endl;
+            // Aquí iría la llamada a cancelarUnaReservacion(...)
+            break;
+        case 4:
+            mostrarEstadoRecursosActual();
+            break;
+        case 0:
+            cerrarSesion();
+            cout << "Sesión de Huésped cerrada." << endl;
+            break;
+        default:
+            cout << "Opción no válida. Intente de nuevo." << endl;
+            break;
+        }
+    } while (opcion != 0);
+}
 /**
  * @brief Método principal que contiene el bucle del menú y maneja la interacción del usuario.
  * Este método será bastante extenso y se desarrollará progresivamente.
  */
 void GestorUdeaStay::ejecutar() {
-    // TODO: Implementar el bucle principal del menú, login, y llamadas a funcionalidades.
-    // Por ahora, un placeholder.
-    cout << "Sistema UdeaStay ejecutándose (menú principal por implementar)." << endl;
-    // Ejemplo de cómo se podría estructurar:
-    // int opcionPrincipal = 0;
-    // do {
-    //     mostrarMenuPrincipal();
-    //     cin >> opcionPrincipal;
-    //     // ... manejar opcionPrincipal ...
-    //         // Si login anfitrion es exitoso:
-    //         // do {
-    //         //    mostrarMenuAnfitrion();
-    //         //    cin >> opcionAnfitrion;
-    //         //    // ... manejar opcionAnfitrion ...
-    //         //    // Aquí iría la opción de llamar a mostrarEstadoRecursosActual()
-    //         // } while (opcionAnfitrion != SALIR_MENU_ANFITRION);
-    //         // cerrarSesion();
-    //
-    //     // Limpiar buffer de cin si es necesario
-    //     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    //
-    // } while (opcionPrincipal != SALIR_DEL_SISTEMA);
+    int opcionPrincipal = -1;
+    do {
+        cout << "\n--- UdeaStay - Menú Principal ---" << endl;
+        cout << "1. Iniciar Sesión como Anfitrión" << endl;
+        cout << "2. Iniciar Sesión como Huésped" << endl;
+        cout << "3. Ver Estado de Recursos (Global)" << endl;
+        cout << "0. Salir del sistema" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcionPrincipal;
+
+        if (cin.fail()) {
+            cout << "Entrada inválida. Por favor ingrese un número." << endl;
+            cin.clear();
+            opcionPrincipal = -1; // Resetear opción para evitar bucle infinito
+        }
+        limpiarBufferEntrada(); // Limpiar el buffer después de leer un número
+
+        string id, contrasena;
+        switch (opcionPrincipal) {
+        case 1: // Login Anfitrión
+            cout << "Ingrese ID de Anfitrión: ";
+            getline(cin, id);
+            cout << "Ingrese Contraseña: ";
+            getline(cin, contrasena);
+            if (intentarLoginAnfitrion(id, contrasena)) {
+                cout << "Login de Anfitrión exitoso." << endl;
+                manejarMenuAnfitrion(); // Llama al menú específico
+            } else {
+                cout << "Login de Anfitrión fallido. Verifique ID y/o contraseña." << endl;
+            }
+            break;
+        case 2: // Login Huésped
+            cout << "Ingrese ID de Huésped: ";
+            getline(cin, id);
+            cout << "Ingrese Contraseña: ";
+            getline(cin, contrasena);
+            if (intentarLoginHuesped(id, contrasena)) {
+                cout << "Login de Huésped exitoso." << endl;
+                manejarMenuHuesped(); // Llama al menú específico
+            } else {
+                cout << "Login de Huésped fallido. Verifique ID y/o contraseña." << endl;
+            }
+            break;
+        case 3: // Ver Recursos
+            mostrarEstadoRecursosActual();
+            break;
+        case 0: // Salir
+            cout << "Saliendo del sistema..." << endl;
+            break;
+        default:
+            cout << "Opción no válida. Intente de nuevo." << endl;
+            break;
+        }
+        cout << endl;
+    } while (opcionPrincipal != 0);
 }
 
 
@@ -238,6 +372,21 @@ int GestorUdeaStay::parsearLineaCSVInterno(const string& linea, string campos[],
     }
 
     return indiceCampo;
+}
+Huesped* GestorUdeaStay::encontrarHuespedPorID(const std::string& idLogin) {
+    cout << "DEBUG_BUSQUEDA_HUE: Iniciando encontrarHuespedPorID..." << endl;
+    cout << "  ID Buscado: [" << idLogin << "] (Longitud: " << idLogin.length() << ")" << endl;
+    for (int i = 0; i < cantidadHuespedes; ++i) {
+        // incrementarContadorIteraciones(); // Comentado porque es método const
+        std::string idEnMemoria = todosHuespedes[i].getId(); // Usa el getter
+        cout << "    Comparando con Huésped en memoria (Índice " << i << ") ID: [" << idEnMemoria << "] (Longitud: " << idEnMemoria.length() << ")" << endl;
+        if (idEnMemoria == idLogin) {
+            cout << "    ¡ID de Huésped Coincide en Índice " << i << "!" << endl;
+            return &todosHuespedes[i];
+        }
+    }
+    cout << "  ID de Huésped [" << idLogin << "] NO encontrado en la colección." << endl;
+    return nullptr;
 }
 Anfitrion* GestorUdeaStay::encontrarAnfitrionPorID(const std::string& idLogin)  {
     cout << "DEBUG_BUSQUEDA_ANF: Iniciando encontrarAnfitrionPorID..." << endl;
@@ -410,8 +559,21 @@ void GestorUdeaStay::cargarHuespedesDesdeArchivo() {
                 incrementarContadorIteraciones();
                 continue;
             }
+
+            // --- INICIO BLOQUE DEPURACIÓN CARGA HUÉSPED ---
+            cout << "DEBUG_CARGA_HUE: Procesando línea CSV para Huésped." << endl;
+            cout << "  CSV Raw -> ID: [" << campos[0] << "], PassLeidaCSV: [" << campos[3] << "]" << endl;
+            // --- FIN BLOQUE DEPURACIÓN CARGA HUÉSPED ---
+
             // Asumiendo que Huesped tiene un constructor que toma: id, nombre, doc, clave, antig, punt
             todosHuespedes[cantidadHuespedes++] = Huesped(campos[0], campos[1], campos[2], campos[3], antiguedad, puntuacion);
+
+            // --- INICIO BLOQUE DEPURACIÓN VERIFICACIÓN OBJETO ---
+            // Verifica el objeto recién añadido (accediendo a cantidadHuespedes-1)
+            cout << "  OBJETO Huésped Creado -> ID via Getter: [" << todosHuespedes[cantidadHuespedes-1].getId()
+                 << "], Pass via Getter: [" << todosHuespedes[cantidadHuespedes-1].getContrasena() << "]" << endl;
+            // --- FIN BLOQUE DEPURACIÓN VERIFICACIÓN OBJETO ---
+
             incrementarContadorIteraciones();
         } else {
             cerr << "Advertencia: Línea con formato incorrecto en huéspedes: " << linea << endl;
@@ -764,20 +926,31 @@ bool GestorUdeaStay::intentarLoginAnfitrion(const string &idLogin, const string 
 }
 
 
-bool GestorUdeaStay::intentarLoginHuesped(const string &documento, const string &contrasena) {
-    for (int i = 0; i < cantidadHuespedes; ++i) {
-        if (todosHuespedes[i].getDocumento() == documento) {
-            if (todosHuespedes[i].getContrasena() == contrasena) {
-                huespedLogueado = &todosHuespedes[i];
-                return true;
-            } else {
-                return false;
-            }
+bool GestorUdeaStay::intentarLoginHuesped(const string &idLogin, const string &contrasenaIngresada) {
+    incrementarContadorIteraciones();
+    cout << "DEBUG_LOGIN_HUE: Iniciando intentarLoginHuesped..." << endl;
+    cout << "  ID Ingresado: [" << idLogin << "], Pass Ingresada: [" << contrasenaIngresada << "]" << endl;
+
+    Huesped* huespedEncontrado = encontrarHuespedPorID(idLogin);
+
+    if (huespedEncontrado != nullptr) {
+        cout << "  Huésped con ID [" << idLogin << "] encontrado. Verificando contraseña..." << endl;
+        std::string passAlmacenada = huespedEncontrado->getContrasena(); // Usa el getter
+        cout << "    Pass Ingresada por Usuario: [" << contrasenaIngresada << "] (Longitud: " << contrasenaIngresada.length() << ")" << endl;
+        cout << "    Pass Almacenada en Objeto: [" << passAlmacenada << "] (Longitud: " << passAlmacenada.length() << ")" << endl;
+
+        if (passAlmacenada == contrasenaIngresada) {
+            huespedLogueado = huespedEncontrado;
+            cout << "    ¡Contraseña CORRECTA! Login exitoso." << endl;
+            return true;
+        } else {
+            cout << "    Contraseña INCORRECTA." << endl;
+            return false;
         }
     }
+    cout << "  Login FALLIDO: Huésped con ID [" << idLogin << "] no encontrado (reportado por intentarLoginHuesped)." << endl;
     return false;
 }
-
 void GestorUdeaStay::cerrarSesion() {
     anfitrionLogueado = nullptr;
     huespedLogueado = nullptr;
