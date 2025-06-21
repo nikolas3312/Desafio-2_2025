@@ -66,9 +66,8 @@ private:
     Anfitrion* encontrarAnfitrionPorDocumento(const std::string& documento) const;
     Huesped* encontrarHuespedPorDocumento(const std::string& documento) const;
     Alojamiento* encontrarAlojamientoPorCodigo(const std::string& codigo) const; // Cambiado para uso público potencial
-    Reservacion* encontrarReservacionActivaPorCodigo(const std::string& codigoReservacion); // Para modificarla
+    Reservacion* encontrarReservacionActivaPorCodigo(const std::string& codigo) const;     // Para modificarla
     int obtenerIndiceReservacionActiva(const std::string& codigoReservacion) const;
-
     std::string generarNuevoCodigoReservacion() const; // Crea un ID único
 
 public:
@@ -81,7 +80,6 @@ public:
     // --- Carga y Guardado de Datos (principalmente interno) ---
     void inicializarSistema(); // Carga todos los datos al inicio
     void finalizarSistema();   // Guarda los datos necesarios al salir
-
     // --- Login y Sesión ---
     bool intentarLoginAnfitrion(const std::string& idLogin, const std::string& contrasena);
     bool intentarLoginHuesped(const std::string& documento, const std::string& contrasena);
@@ -90,14 +88,12 @@ public:
     bool haySesionHuespedActiva() const;
     const Anfitrion* getAnfitrionActual() const; // Devuelve el anfitrión logueado
     const Huesped* getHuespedActual() const;     // Devuelve el huésped logueado
-
     // --- Funcionalidades para Huéspedes ---
     void mostrarAlojamientosDisponibles(Fecha fecha, const std::string& municipio, int noches,
-                                        double costoMax = -1.0, double puntMinAnf = -1.0) const;
+                                        double costoMax = -1.0, double puntMinAnf = -1.0);
     // getAlojamientoPorCodigo se puede usar antes de reservar si el huésped busca por código
     bool crearNuevaReservacion(const std::string& codigoAlojamiento, Fecha fechaInicio, int noches,
                                const std::string& metodoPago, const std::string& anotacionesHuesped);
-
     // --- Funcionalidades para Anfitriones ---
     void mostrarReservacionesDelAnfitrion(Fecha fechaDesde, Fecha fechaHasta) const; // Muestra las del anfitrión logueado
     bool actualizarArchivoHistorico(Fecha fechaCorte);
