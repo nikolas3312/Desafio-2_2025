@@ -30,6 +30,8 @@ public:
     Fecha getFechaSalida() const;
     bool EstaActiva() const;
     string getAnotaciones() const;
+    string getCodigoAlojamiento() const;
+    string getDocumentoHuesped() const;
 
     //Setters
     void setActiva(bool estado);
