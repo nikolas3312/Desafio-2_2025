@@ -1,21 +1,18 @@
 CodigoID,Nombre,Direccion,Departamento,Municipio,Tipo,Amenidades,Precio,AnfitrionID
-ALO001,"Casa del Río","Calle 12 #34-56","Antioquia","Medellín",Casa,"piscina;jardín;wifi",180000.00,ANF001
-ALO002,"Apartamento 101","Cra 45 #67-89","Antioquia","Medellín",Apartamento,"ascensor;wifi",150000.00,ANF001
-ALO003,"Finca La Esperanza","Vereda El Tablazo","Antioquia","Rionegro",Casa,"piscina;chimenea",200000.00,ANF001
-ALO004,"Loft Central","Calle 8 #45-67","Antioquia","Envigado",Apartamento,"jacuzzi;wifi",160000.00,ANF002
-ALO005,"Cabaña Azul","Km 5 vía Guatapé","Antioquia","Guatapé",Casa,"chimenea;zona BBQ",170000.00,ANF002
-ALO006,"Ático Moderno","Cra 33 #76-98","Antioquia","Bello",Apartamento,"ascensor;terraza",140000.00,ANF002
-ALO007,"Villa Encanto","Calle 5 #23-45","Cundinamarca","La Calera",Casa,"piscina;parqueadero",220000.00,ANF003
-ALO008,"Estudio Nube","Cra 10 #20-30","Cundinamarca","Bogotá",Apartamento,"wifi;cocina",130000.00,ANF003
-ALO009,"Finca El Mirador","Vereda El Retiro","Antioquia","Retiro",Casa,"chimenea;piscina",210000.00,ANF004
-ALO010,"Apartamento Norte","Av. 68 #80-40","Cundinamarca","Bogotá",Apartamento,"ascensor;wifi",145000.00,ANF004
-ALO011,"Casa Familiar","Cra 20 #15-20","Santander","Bucaramanga",Casa,"zona BBQ;jardín",125000.00,ANF005
-ALO012,"Apartamento Vista","Calle 10 #12-30","Santander","Bucaramanga",Apartamento,"wifi;cocina",135000.00,ANF005
-ALO013,"Casa de Campo","Finca El Trébol","Boyacá","Villa de Leyva",Casa,"chimenea;piscina",195000.00,ANF006
-ALO014,"Penthouse Elite","Cra 9 #12-14","Boyacá","Tunja",Apartamento,"terraza;wifi",160000.00,ANF006
-ALO015,"Refugio Natural","Km 3 vía Armenia","Quindío","Armenia",Casa,"piscina;zona BBQ",185000.00,ANF007
-ALO016,"Loft Creativo","Cra 21 #45-60","Quindío","Armenia",Apartamento,"jacuzzi;wifi",155000.00,ANF007
-ALO017,"Casa Colonial","Calle Real #5-67","Bolívar","Cartagena",Casa,"patio interno;wifi",190000.00,ANF008
-ALO018,"Apto Histórico","Cra 3 #45-55","Bolívar","Cartagena",Apartamento,"wifi;balcón",175000.00,ANF008
-ALO019,"Cabaña Verde","Vereda Las Palmas","Magdalena","Santa Marta",Casa,"piscina;hamacas",170000.00,ANF009
-ALO020,"Mini Loft Caribe","Cra 7 #89-12","Magdalena","Santa Marta",Apartamento,"wifi;cocina",145000.00,ANF010
+ALO001,Casa del Río,Calle 12 #34-56,Antioquia,Medellín,Casa,"piscina;jardín;wifi",180000,ANF005
+ALO002,Apartamento 101,Cra 45 #67-89,Antioquia,Medellín,Apartamento,"ascensor;wifi",150000,ANF001
+ALO003,Finca La Esperanza,Vereda El Tablazo,Antioquia,Rionegro,Casa,"piscina;chimenea",200000,ANF005
+ALO004,Loft Central,Calle 8 #45-67,Antioquia,Medellín,Apartamento,"jacuzzi;wifi",160000,ANF002
+ALO005,Cabaña Azul,Km 5 vía Guatapé,Antioquia,Medellín,Casa,"chimenea;zona BBQ",170000,ANF002
+ALO006,Ático Moderno,Cra 33 #76-98,Antioquia,Medellín,Apartamento,"ascensor;terraza",140000,ANF003
+ALO007,Villa Encanto,Calle 5 #23-45,Antioquia,Medellín,Casa,"piscina;parqueadero",220000,ANF003
+ALO008,Estudio Nube,Cra 10 #20-30,Antioquia,Medellín,Apartamento,"wifi;cocina",130000,ANF004
+ALO009,Finca El Mirador,Vereda El Retiro,Antioquia,Medellín,Casa,"chimenea;piscina",210000,ANF004
+ALO010,Casa Familiar,Cra 20 #15-20,Antioquia,Medellín,Casa,"zona BBQ;jardín",125000,ANF005
+ALO011,Apartamento Vista,Calle 10 #12-30,Antioquia,Medellín,Apartamento,"wifi;cocina",135000,ANF005
+ALO012,Casa de Campo,Finca El Trébol,Antioquia,Copacabana,Casa,"chimenea;piscina",195000,ANF006
+ALO013,Penthouse Elite,Cra 9 #12-14,Antioquia,Medellín,Apartamento,"terraza;wifi",160000,ANF006
+ALO014,Refugio Natural,Km 3 vía Armenia,Antioquia,Medellín,Casa,"piscina;zona BBQ",185000,ANF007
+ALO015,Loft Creativo,Cra 21 #45-60,Antioquia,Medellín,Apartamento,"jacuzzi;wifi",155000,ANF007
+ALO016,Casa Colonial,Calle Real #5-67,Antioquia,Medellín,Casa,"patio interno;wifi",190000,ANF008
+ALO017,Apto Histórico,Cra 3 #45-55,Antioquia,Medellín,Apartamento,"wifi;balcón",175000,ANF009
