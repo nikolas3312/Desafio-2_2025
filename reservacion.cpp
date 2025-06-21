@@ -42,6 +42,14 @@ string Reservacion::getAnotaciones() const {
     return anotaciones;
 }
 
+string Reservacion::getCodigoAlojamiento() const {
+    return codigoAlojamiento;
+}
+
+string Reservacion::getDocumentoHuesped() const {
+    return documentoHuesped;
+}
+
 void Reservacion::setAnotaciones(const string& notas) {
     if (notas.length() > 1000) {
         anotaciones = notas.substr(0,1000);
