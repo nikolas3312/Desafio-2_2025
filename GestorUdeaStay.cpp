@@ -8,6 +8,7 @@
 #include <limits>       // Para std::numeric_limits (limpiar buffer de cin)
 #include <algorithm>    // Para std::remove si se usa para limpiar strings (opcional)
 #include <cctype>
+#include <iomanip>  // para std::setfill y setw se usa para formatear un identificador de reservacion unico
 // Usamos el namespace std para este archivo .cpp
 using namespace std;
 
@@ -81,6 +82,12 @@ static inline std::string& rtrim(std::string& s) {
 static inline std::string& trim(std::string& s) {
     return ltrim(rtrim(s));
 }
+// Recorta y devuelve una copia de s (no in-place)
+static inline std::string trim(const std::string& s) {
+    std::string copia = s;
+    return ltrim(rtrim(copia));
+}
+
 // --- Fin Funciones de Trimming ---
 void GestorUdeaStay::inspeccionarDatosCargadosParaDebug()  {
     cout << "\n--- DEBUG: Inspección de Datos Cargados ---" << endl;
@@ -140,14 +147,28 @@ void GestorUdeaStay::manejarMenuAnfitrion() {
             incrementarContadorIteraciones();
             break;
         }
-        case 2:
-            cout << "Funcionalidad 'Consultar mis reservaciones' por implementar." << endl;
-            // Aquí iría la llamada a mostrarReservacionesDelAnfitrion(...)
+        case 2: {
+            int d1, m1, a1, d2, m2, a2;
+            cout << "Ingrese fecha inicial (dd mm aaaa): ";
+            cin >> d1 >> m1 >> a1;
+            cout << "Ingrese fecha final (dd mm aaaa): ";
+            cin >> d2 >> m2 >> a2;
+
+            Fecha f1, f2;
+            f1.setFecha(d1, m1, a1);
+            f2.setFecha(d2, m2, a2);
+
+            mostrarReservacionesDelAnfitrion(f1, f2);
             break;
-        case 3:
-            cout << "Funcionalidad 'Anular una reservación' por implementar." << endl;
-            // Aquí iría la llamada a cancelarUnaReservacion(...)
+        }
+
+        case 3: {
+            std::string codigo;
+            std::cout << "Ingrese el código de la reservación que desea anular: ";
+            std::getline(std::cin >> std::ws, codigo);
+            cancelarUnaReservacion(codigo);
             break;
+        }
         case 4:
             mostrarEstadoRecursosActual();
             break;
@@ -181,18 +202,94 @@ void GestorUdeaStay::manejarMenuHuesped() {
         limpiarBufferEntrada();
 
         switch (opcion) {
-        case 1:
-            cout << "Funcionalidad 'Buscar alojamiento disponible' por implementar." << endl;
-            // Aquí iría la llamada a mostrarAlojamientosDisponibles(...)
+        case 1: {
+            Fecha fechaEntrada;
+            int noches;
+
+            cout << "Ingrese fecha de entrada (dd mm aaaa): ";
+            int d, m, a;
+            cin >> d >> m >> a;
+            fechaEntrada.setFecha(d, m, a);
+
+            cout << "Ingrese cantidad de noches: ";
+            cin >> noches;
+
+            string municipioIgnorado = "";
+            double precioIgnorado = -1;
+            double puntuacionIgnorada = -1;
+
+            mostrarAlojamientosDisponibles(fechaEntrada, municipioIgnorado, noches, precioIgnorado, puntuacionIgnorada);
             break;
-        case 2:
-            cout << "Funcionalidad 'Crear nueva reservación por código' por implementar." << endl;
-            // Aquí iría la llamada a crearNuevaReservacion(...)
+        }
+        case 2: {    
+            std::string codigoAloj;
+            int noches;
+            std::string metodoPago;
+            std::string anotaciones;
+            int dia, mes, anio;
+
+            cout << "      Crear Nueva Reservación    " << endl;
+            cout << "Ingrese el código del alojamiento: ";
+            cin >> codigoAloj;
+
+            cout << "Ingrese la fecha de entrada (dd mm aaaa): ";
+            cin >> dia >> mes >> anio;
+
+            cout << "Ingrese el número de noches: ";
+            cin >> noches;
+
+            cin.ignore(); // Limpiar buffer
+            cout << "Ingrese el método de pago: ";
+            getline(cin, metodoPago);
+
+            cout << "Ingrese anotaciones (opcional): ";
+            getline(cin, anotaciones);
+
+            Fecha fechaEntrada(dia, mes, anio);
+
+            // --- Lógica principal ---
+            bool exito = crearNuevaReservacion(codigoAloj, fechaEntrada, noches, metodoPago, anotaciones);
+
+            if (exito) {
+                guardarReservacionesActivasEnArchivo(); // Sincronizar con el dataset
+            } else {
+                cout << "No se pudo crear la reservación. Inténtelo nuevamente.\n";
+            }
+
             break;
-        case 3:
-            cout << "Funcionalidad 'Anular una de mis reservaciones' por implementar." << endl;
-            // Aquí iría la llamada a cancelarUnaReservacion(...)
+        }
+        case 3: {
+            cout << " Anular una de mis reservaciones ";
+
+            // Mostrar reservaciones activas del huésped
+            const Huesped* h = getHuespedActual();
+            bool tieneActivas = false;
+            for (int i = 0; i < h->getCantidadReservaciones(); ++i) {
+                std::string codigo = h->getCodigoReservacion(i);
+                Reservacion* r = encontrarReservacionActivaPorCodigo(codigo);
+                if (r != nullptr && r->EstaActiva()) {
+                    r->mostrarComprobante();
+                    cout << "              " << endl;
+                    tieneActivas = true;
+                }
+            }
+
+            if (!tieneActivas) {
+                cout << "No tiene reservaciones activas para anular.\n";
+                break;
+            }
+
+            string codigoElegido;
+            cout << "Ingrese el código de la reservación que desea anular: ";
+            cin >> codigoElegido;
+
+            bool resultado = cancelarUnaReservacion(codigoElegido);
+            if (!resultado) {
+                cout << "No se pudo anular la reservación.\n";
+            }
+
             break;
+        }
         case 4:
             mostrarEstadoRecursosActual();
             break;
@@ -403,6 +500,16 @@ Anfitrion* GestorUdeaStay::encontrarAnfitrionPorID(const std::string& idLogin)  
     cout << "  ID de Anfitrion [" << idLogin << "] NO encontrado en la colección." << endl;
     return nullptr;
 }
+
+Alojamiento* GestorUdeaStay::encontrarAlojamientoPorCodigo(const std::string& codigo) const {
+    for (int i = 0; i < cantidadAlojamientos; ++i) {
+        if (todosAlojamientos[i].getCodigoID() == codigo) {
+            return &todosAlojamientos[i];
+        }
+    }
+    return nullptr; // Si no se encuentra
+}
+
 // --- Métodos de Carga de Datos ---
 void GestorUdeaStay::cargarAlojamientosDesdeArchivo() {
     incrementarContadorIteraciones();
@@ -642,6 +749,7 @@ void GestorUdeaStay::cargarReservacionesActivasDesdeArchivo() {
             // Solo cargar si la reservación está marcada como activa en el archivo
             if (activa) {
                 asegurarCapacidadReservaciones(); // Llama al método de redimensionamiento
+                std::cout << "DEBUG_CARGA_RES: Cargando -> " << codigoRes << ", Alojamiento: " << codigoAloja << ", Huesped: " << docHuesped << "\n";
 
                 // Crear el objeto Reservacion usando el constructor parametrizado
                 // El constructor de Reservacion que me mostraste es:
@@ -678,7 +786,6 @@ void GestorUdeaStay::guardarReservacionesActivasEnArchivo()  {
         incrementarContadorIteraciones();
         return;
     }
-
     archivo << "CodigoReservacion,CodigoAlojamiento,DocumentoHuesped,FechaEntrada,DuracionNoches,MetodoPago,FechaPago,MontoPagado,Anotaciones,Activa\n";
     incrementarContadorIteraciones();
 
@@ -759,6 +866,123 @@ bool GestorUdeaStay::actualizarArchivoHistorico(Fecha fechaCorte) {
 
     return true;
 }
+
+std::string GestorUdeaStay::generarNuevoCodigoReservacion() const {
+    int numero = cantidadReservaciones + 1;
+    std::ostringstream oss;
+    oss << "RES" << std::setfill('0') << std::setw(3) << numero;
+    return oss.str();  // Ej: RES001, RES002
+}
+
+//Implementacion de creacion de reservaciones
+
+bool GestorUdeaStay::crearNuevaReservacion(const std::string& codigoAlojamiento, Fecha fechaInicio, int noches,
+                                           const std::string& metodoPago, const std::string& anotacionesHuesped) {
+    incrementarContadorIteraciones();
+
+    if (!haySesionHuespedActiva()) {
+        std::cerr << "Error: No hay un huésped logueado para crear una reservación." << std::endl;
+        incrementarContadorIteraciones();
+        return false;
+    }
+
+    Alojamiento* alojamiento = encontrarAlojamientoPorCodigo(codigoAlojamiento);
+    if (alojamiento == nullptr) {
+        std::cerr << "Error: No se encontró un alojamiento con código " << codigoAlojamiento << "." << std::endl;
+        incrementarContadorIteraciones();
+        return false;
+    }
+
+    Fecha fechaSalida = fechaInicio.calcularFechaMasDuracion(noches);
+
+    // Verificamos que no exista una reservación activa que cruce estas fechas para este alojamiento
+    for (int i = 0; i < cantidadReservaciones; ++i) {
+        const Reservacion& r = todasReservaciones[i];
+        if (r.EstaActiva() && r.getCodigoAlojamiento() == codigoAlojamiento) {
+            Fecha entradaExistente = r.getFechaEntrada();
+            Fecha salidaExistente = r.getFechaSalida();
+            if (!(fechaSalida.esMenor(entradaExistente) || fechaInicio.esMayorOIgual(salidaExistente))) {
+                std::cerr << "Error: El alojamiento ya tiene una reservación activa que se cruza con las fechas solicitadas." << std::endl;
+                incrementarContadorIteraciones(3); // por comparaciones
+                return false;
+            }
+        }
+    }
+
+    int montoTotal = static_cast<int>(alojamiento->getPrecioPorNoche() * noches);
+    Fecha fechaPago = Fecha(); // fecha actual no disponible, se pone default
+
+    std::string nuevoCodigo = generarNuevoCodigoReservacion(); // Método que tú ya declaraste
+
+    // Asegurar espacio en arreglo
+    asegurarCapacidadReservaciones();
+
+    todasReservaciones[cantidadReservaciones++] = Reservacion(
+        nuevoCodigo,
+        codigoAlojamiento,
+        huespedLogueado->getDocumento(),
+        metodoPago,
+        fechaInicio,
+        noches,
+        fechaPago,
+        montoTotal,
+        anotacionesHuesped
+        );
+
+    huespedLogueado->agregarCodigoReservacion(nuevoCodigo);
+
+    std::cout << "Reservación creada exitosamente con código: " << nuevoCodigo << std::endl;
+    guardarReservacionesActivasEnArchivo();
+    incrementarContadorIteraciones(5);
+
+    return true;
+}
+// Implementacion de cancelar una Reservacion
+bool GestorUdeaStay::cancelarUnaReservacion(const std::string& codigoReservacion) {
+    incrementarContadorIteraciones();
+
+    int indice = obtenerIndiceReservacionActiva(codigoReservacion);
+    if (indice == -1) {
+        cerr << "Reservación no encontrada o ya está anulada.\n";
+        return false;
+    }
+
+    Reservacion& reservacion = todasReservaciones[indice];
+
+    if (haySesionHuespedActiva()) {
+        if (reservacion.getDocumentoHuesped() != huespedLogueado->getDocumento()) {
+            cerr << "Error: No tiene permiso para anular esta reservación.\n";
+            return false;
+        }
+        huespedLogueado->eliminarCodigoReservacion(codigoReservacion);
+
+    } else if (haySesionAnfitrionActiva()) {
+        Alojamiento* aloja = encontrarAlojamientoPorCodigo(reservacion.getCodigoAlojamiento());
+
+        std::string idAnfitrionAlojamiento = trim(aloja->getAnfitrionResponsableID());
+        std::string idAnfitrionLogueado   = trim(anfitrionLogueado->getId());
+
+        std::cout << "DEBUG_IDS: Alojamiento tiene ID [" << idAnfitrionAlojamiento
+                  << "], anfitrión logueado es [" << idAnfitrionLogueado << "]\n";
+
+        if (aloja == nullptr || idAnfitrionAlojamiento != idAnfitrionLogueado) {
+            std::cerr << "Error: Esta reservación no le pertenece a este anfitrión.\n";
+            return false;
+        }
+    } else {
+        cerr << "Error: No hay ninguna sesión activa.\n";
+        return false;
+    }
+
+    reservacion.anular();
+    agregarReservacionAHistoricoEnArchivo(reservacion);
+    guardarReservacionesActivasEnArchivo();
+    cout << "Reservación anulada con éxito.\n";
+    incrementarContadorIteraciones(3);
+    return true;
+}
+
+
 
 
 // --- Implementaciones de los Métodos de Redimensionamiento (Esqueletos) ---
@@ -966,6 +1190,123 @@ const Anfitrion* GestorUdeaStay::getAnfitrionActual() const {
 
 const Huesped* GestorUdeaStay::getHuespedActual() const {
     return huespedLogueado;
+}
+
+bool GestorUdeaStay::haySesionAnfitrionActiva() const {
+    return anfitrionLogueado != nullptr;
+}
+
+
+int GestorUdeaStay::obtenerIndiceReservacionActiva(const std::string& codigoBuscado) const {
+    for (int i = 0; i < cantidadReservaciones; ++i) {
+        const std::string& cod = todasReservaciones[i].getCodigo();
+
+        std::cout << "DEBUG_COMPARACION: [" << codigoBuscado << "] vs [" << cod << "]\n";
+
+        if (cod == codigoBuscado) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+Reservacion* GestorUdeaStay::encontrarReservacionActivaPorCodigo(const std::string& codigo) const {
+    for (int i = 0; i < cantidadReservaciones; ++i) {
+        if (todasReservaciones[i].getCodigo() == codigo && todasReservaciones[i].EstaActiva()) {
+            return &todasReservaciones[i];
+        }
+    }
+    return nullptr;
+}
+
+Anfitrion* GestorUdeaStay::encontrarAnfitrionPorDocumento(const std::string& documento) const {
+    for (int i = 0; i < cantidadAnfitriones; ++i) {
+        if (todosAnfitriones[i].getDocumento() == documento) {
+            return &todosAnfitriones[i];
+        }
+    }
+    return nullptr;
+}
+
+std::string aMinusculas(const std::string& texto) {
+    std::string resultado = texto;
+    for (char& c : resultado) {
+        c = std::tolower(static_cast<unsigned char>(c));
+    }
+    return resultado;
+}
+
+void GestorUdeaStay::mostrarAlojamientosDisponibles(Fecha fecha, const string& municipio, int noches,
+                                                    double costoMax, double puntMinAnf) {
+    incrementarContadorIteraciones();
+
+    Fecha fechaSalida = fecha.calcularFechaMasDuracion(noches);
+    bool seEncontroAlguno = false;
+
+    for (int i = 0; i < cantidadAlojamientos; ++i) {
+        const Alojamiento& aloja = todosAlojamientos[i];
+        bool estaOcupado = false;
+        for (int j = 0; j < cantidadReservaciones && !estaOcupado; ++j) {
+            const Reservacion& r = todasReservaciones[j];
+            if (r.EstaActiva() && r.getCodigoAlojamiento() == aloja.getCodigoID()) {
+                Fecha entradaExistente = r.getFechaEntrada();
+                Fecha salidaExistente = r.getFechaSalida();
+                if (!(fechaSalida.esMenor(entradaExistente) || fecha.esMayorOIgual(salidaExistente))) {
+                    estaOcupado = true;
+                }
+            }
+        }
+
+        if (!estaOcupado) {
+            aloja.mostrarDetalles();
+            cout << endl;
+            seEncontroAlguno = true;
+        }
+
+        incrementarContadorIteraciones(); // por iteración individual
+    }
+
+    if (!seEncontroAlguno) {
+        cout << "No se encontraron alojamientos disponibles en ese rango de fechas.\n";
+    }
+}
+
+//Mostrar reservaciones del anfitrion
+
+void GestorUdeaStay::mostrarReservacionesDelAnfitrion(Fecha fechaDesde, Fecha fechaHasta) const {
+    if (anfitrionLogueado == nullptr) {
+        cout << "ERROR: No hay ningún anfitrión con sesión iniciada.\n";
+        return;
+    }
+
+    cout << "Reservaciones activas del anfitrión " << anfitrionLogueado->getNombre()
+         << " entre " << fechaDesde.toString() << " y " << fechaHasta.toString() << ":\n";
+
+    bool seMostroAlguna = false;
+
+    for (int i = 0; i < cantidadReservaciones; ++i) {
+        const Reservacion& r = todasReservaciones[i];
+        if (!r.EstaActiva()) continue;
+
+        const Alojamiento* aloj = encontrarAlojamientoPorCodigo(r.getCodigoAlojamiento());
+        if (aloj == nullptr) continue;
+
+        if (aloj->getAnfitrionResponsableID() != anfitrionLogueado->getId()) continue;
+
+        Fecha entrada = r.getFechaEntrada();
+        Fecha salida = r.getFechaSalida();
+
+        // Mostrar si hay solapamiento de fechas
+        if (!(fechaHasta.esMenor(entrada) || fechaDesde.esMayorOIgual(salida))) {
+            r.mostrarComprobante();
+            cout << "--------------------------------------\n";
+            seMostroAlguna = true;
+        }
+    }
+
+    if (!seMostroAlguna) {
+        cout << "No se encontraron reservaciones activas en ese intervalo para este anfitrión.\n";
+    }
 }
 
 // TODO: Implementar el resto de los métodos declarados en GestorUdeaStay.h
